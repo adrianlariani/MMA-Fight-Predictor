@@ -16,8 +16,6 @@ class LogisticRegression(nn.Module):
         y_predicted = torch.sigmoid(self.linear(x))
         return y_predicted
 
-
-# Load the trained model
 model = LogisticRegression(n_input_features=13)
 model.load_state_dict(torch.load('../mma_predictor_model.pth'))
 model.eval()
