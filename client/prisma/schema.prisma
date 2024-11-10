@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model fighter_statistics {
+  id         Int      @id @default(autoincrement())
+  name       String?  @db.VarChar(100)
+  height     Decimal? @db.Decimal
+  weight     Decimal? @db.Decimal
+  reach      Decimal? @db.Decimal
+  stance     String?  @db.VarChar(11)
+  slpm       Decimal? @db.Decimal
+  str_acc    Decimal? @db.Decimal
+  sapm       Decimal? @db.Decimal
+  str_def    Decimal? @db.Decimal
+  td_avg     Decimal? @db.Decimal
+  td_acc     Decimal? @db.Decimal
+  td_def     Decimal? @db.Decimal
+  sub_avg    Decimal? @db.Decimal
+  image_link String?  @db.VarChar(255)
+}
+
+model fights {
+  id                     Int      @id @default(autoincrement())
+  winner                 Int?
+  weight_diff            Decimal? @db.Decimal
+  height_diff            Decimal? @db.Decimal
+  reach_diff             Decimal? @db.Decimal
+  r_stance               Decimal? @db.Decimal
+  b_stance               Decimal? @db.Decimal
+  slpm_total_diff        Decimal? @db.Decimal
+  sig_str_acc_total_diff Decimal? @db.Decimal
+  sapm_total_diff        Decimal? @db.Decimal
+  str_def_total_diff     Decimal? @db.Decimal
+  td_avg_diff            Decimal? @db.Decimal
+  td_acc_total_diff      Decimal? @db.Decimal
+  td_def_total_diff      Decimal? @db.Decimal
+  sub_avg_diff           Decimal? @db.Decimal
+}
