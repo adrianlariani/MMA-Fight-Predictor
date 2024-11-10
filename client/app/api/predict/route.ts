@@ -60,13 +60,16 @@ export async function POST(req: Request) {
     sub_avg_diff,
   ];
 
-  const response = await fetch("http://localhost:5000/predict", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ features: features }),
-  });
+  const response = await fetch(
+    "https://mma-fight-predictor.onrender.com/predict",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ features: features }),
+    }
+  );
 
   const jsonResponse = await response.json();
   console.log(jsonResponse);
