@@ -36,7 +36,7 @@ def predict():
 
 @app.route('/keep_online', methods=['GET'])
 def ping():
-    return jsonify({"message": "Server is online"}), 200
+    return '', 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
