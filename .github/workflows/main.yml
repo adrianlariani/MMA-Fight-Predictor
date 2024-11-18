@@ -2,11 +2,12 @@ name: Keep Server Online
 
 on:
   schedule:
-    - cron: "*/15 * * * *" 
+    - cron: "*/15 * * * *"  
+  workflow_dispatch:         
 
 jobs:
   ping_server:
     runs-on: ubuntu-latest
     steps:
       - name: Send GET request to /keep_online
-        run: curl -X GET --silent --output /dev/null ${{ secrets.SERVER_URL }}
+        run: curl -X GET --silent --fail --output /dev/null ${{ secrets.SERVER_URL }}
