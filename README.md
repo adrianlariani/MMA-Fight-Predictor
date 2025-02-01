@@ -16,12 +16,6 @@ Project Link: https://mma-fight-predictor-gamma.vercel.app/
 - Machine Learning: Pytorch
 - etc.
 
-## Deployment
-This project is deployed across multiple platforms to optimize performance and scalability:
-- Frontend (Next.js): Deployed on Vercel, which provides fast serverless deployments and handles frontend routing.
-- Backend (Flask): Hosted on Render, which supports easy deployment for Python-based applications with automatic scaling.
-- Database (PostgreSQL): Managed on Neon, a modern PostgreSQL hosting service optimized for low latency and ease of use.
-
 
 
 ## Project Structure
