@@ -5,6 +5,8 @@ import torch
 import torch.nn as nn
 import os
 
+from server.update_fighter_data import event_update_fighters
+
 app = Flask(__name__)
 CORS(app)
 
@@ -42,6 +44,11 @@ def predict():
 def ping():
     return ('', 204)
 
+
+@app.route('/update_fighter_data', methods=['PUT'])
+def update_fighter_data():
+    event_update_fighters()
+    return '', 204
 
 def get_fighter_data_by_id(id1, id2):
       query = """SELECT

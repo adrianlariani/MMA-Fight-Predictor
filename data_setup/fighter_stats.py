@@ -4,25 +4,21 @@ import requests
 from bs4 import BeautifulSoup
 import string
 import tqdm
+from dotenv import load_dotenv
+from data_setup.fighter_pictures import get_image
+
+load_dotenv()
+
 
 import psycopg2
-from dotenv import load_dotenv
-load_dotenv(dotenv_path='.env')
 
 
-conn = psycopg2.connect(database=os.getenv("DATABASE_NAME"),
-                        host=os.getenv("DATABASE_HOST"),
-                        user=os.getenv("DATABASE_USERNAME"),
-                        password=os.getenv("DATABASE_PASSWORD")
-                        )
+conn = psycopg2.connect(database=os.environ["DATABASE_NAME"],
+                          host=os.environ["DATABASE_HOST"],
+                          user=os.environ["DATABASE_USERNAME"],
+                          password=os.environ["DATABASE_PASSWORD"]
+                          )
 
-insert_query = """
-INSERT INTO fighter_statistics (
-    name, height, weight, reach, stance, SLpM, Str_Acc, SApM, Str_Def, TD_Avg, TD_Acc, TD_Def, Sub_Avg, image_link
-) VALUES (
-    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-)
-"""
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
@@ -97,16 +93,40 @@ def validate_and_insert(name, height_str, weight_str, reach_str, stance, slpm, s
     if stance not in valid_stances:
         print(f"Invalid stance value: {stance}. Must be one of {valid_stances}.")
         return
+    image = get_image(name)
+    insert_data = (name, height, weight, reach, stance, slpm, str_acc, sapm, str_def, td_avg, td_acc, td_def, sub_avg, image)
+    update_data = (height, weight, reach, stance, slpm, str_acc, sapm, str_def, td_avg, td_acc, td_def, sub_avg, image, name)
+    print(insert_data)
 
-    data = (name, height, weight, reach, stance, slpm, str_acc, sapm, str_def, td_avg, td_acc, td_def, sub_avg, "")
+    #try:
+    with conn.cursor() as cur:
+        cur.execute("SELECT id FROM fighter_statistics WHERE name = %s", (name,))
+        result = cur.fetchone()
 
-    try:
-        with conn.cursor() as cur:
-            cur.execute(insert_query, data)
-            conn.commit()
-            print(f"Entry for {name} added successfully")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+        if result:
+            update_query = """
+            UPDATE fighter_statistics SET 
+                height=%s, weight=%s, reach=%s, stance=%s, SLpM=%s, Str_Acc=%s, 
+                SApM=%s, Str_Def=%s, TD_Avg=%s, TD_Acc=%s, TD_Def=%s, Sub_Avg=%s, image_link=%s
+            WHERE name=%s
+            """
+            cur.execute(update_query, update_data)
+            print(f"Updated existing entry for {name}")
+        else:
+            insert_query = """
+            INSERT INTO fighter_statistics (
+                name, height, weight, reach, stance, SLpM, Str_Acc, SApM, Str_Def, TD_Avg, TD_Acc, TD_Def, Sub_Avg, image_link
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+            )
+            """
+            cur.execute(insert_query, insert_data)
+            print(f"Inserted new entry for {name}")
+
+        conn.commit()
+
+    #except Exception as e:
+    #    print(f"An error occurred: {e}")
 
 
 
