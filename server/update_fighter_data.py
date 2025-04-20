@@ -1,6 +1,8 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from bs4 import BeautifulSoup
 from selenium import webdriver
-
 from data_setup.fighter_stats import fighter_info
 
 

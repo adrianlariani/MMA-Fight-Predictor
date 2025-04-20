@@ -1,11 +1,14 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import psycopg2
-from flask import Flask, request, jsonify
-from flask_cors import CORS
 import torch
 import torch.nn as nn
-import os
-
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from update_fighter_data import event_update_fighters
+
+
 
 app = Flask(__name__)
 CORS(app)
