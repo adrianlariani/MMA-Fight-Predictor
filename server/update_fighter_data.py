@@ -4,16 +4,21 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from data_setup.fighter_stats import fighter_info
+import chromedriver_autoinstaller
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
 
 
 def event_update_fighters():
     recent_events_link = "https://www.ufc.com/events#events-list-past"
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless=new')
-    options.add_argument('--disable-gpu')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--remote-debugging-port=9222')
+    chromedriver_autoinstaller.install()
+
+    options = Options()
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+
     browser = webdriver.Chrome(options=options)
     browser.get(recent_events_link)
     html = browser.page_source
