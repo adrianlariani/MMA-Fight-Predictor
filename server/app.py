@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import os
 
-from server.update_fighter_data import event_update_fighters
+from update_fighter_data import event_update_fighters
 
 app = Flask(__name__)
 CORS(app)
